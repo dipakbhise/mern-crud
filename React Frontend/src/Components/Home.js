@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
+import Addstudent from './Addstudent';
 
 const Home = () => {
 
@@ -16,7 +17,7 @@ const Home = () => {
         
         axios.get("http://localhost:8000/studentdata").then((response)=>{
 
-        setData(response.data)
+        setData((response.data).reverse())
         })
 
 
@@ -39,6 +40,10 @@ const Home = () => {
     return (
         <>
 
+        <Addstudent/>
+
+<h3 className="text-center p-3 text-secondary mt-5">View Student Data</h3>
+
 <table class="table my-5 text-center">
   <thead>
     <tr>
@@ -60,8 +65,9 @@ const Home = () => {
       <td>{item.lastname}</td>
       <td>{item.age}</td>
       <td>{item.branch}</td>
-      <td><button className="btn btn-primary">View</button>
-      <button className="btn btn-primary mx-3">Edit</button>
+      <td>
+      <NavLink to={`/viewstudent/${item._id}`}><button className="btn btn-primary">View</button></NavLink>
+      <NavLink to={`/editstudent/${item._id}`}><button className="btn btn-primary mx-3" >Edit</button></NavLink>
       <button className="btn btn-primary" onClick={()=>deleteData(item._id)}>Delete</button></td>
     </tr> ) })
 

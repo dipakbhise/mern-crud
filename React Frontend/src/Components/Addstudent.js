@@ -32,51 +32,81 @@ const Addstudent = () => {
                     age: "",
                     branch: ""
                 })
-
-                
-
-
-
+                alert("Data Added Successfully")
             }).catch((error) => {
                 console.log(error)
             })
 
         }
-
-
-
-
-
-
     }
 
 
     return (
+        <>
 
-
-        <div>
+            <h3 className="text-center p-3 text-secondary">Add Student Data</h3>
 
             <form onSubmit={(e) => submitevent(e)}>
-                First Name: <input type="text" name="firstname" value={state.firstname} onChange={(e) => handler(e)} />
 
-                Last Name: <input type="text" name="lastname" value={state.lastname} onChange={(e) => handler(e)} />
+                <div class="d-flex justify-content-center">
 
-                Age: <input type="number" name="age" value={state.age} onChange={(e) => handler(e)} />
+                    <div className="mx-5">
 
-                Branch: <select name="branch" value={state.branch} onChange={(e) => handler(e)}>
-                    <option value="">Select Your Branch</option>
-                    <option value="Food">Food</option>
-                    <option value="Civil">Civil</option>
-                    <option value="Computer">Computer</option>
-                </select>
+                        <div class="mb-3">
+
+                            <label for="fname" class="form-label" >First Name</label>
+
+                            <input type="text" class="form-control" id="fname" name="firstname" value={state.firstname} onChange={(e) => handler(e)} />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" class="form-control" id="age" name="age" value={state.age} onChange={(e) => handler(e)} />
+
+                        </div>
+
+                    </div>
+
+                    <div>
 
 
-                <button type="submit">Submit</button>
+                        <div class="mb-3">
 
+                            <label for="lname" class="form-label">Last Name</label>
+
+                            <input type="text" class="form-control" id="lname" name="lastname" value={state.lastname} onChange={(e) => handler(e)} />
+
+                        </div>
+
+                        <div class="mb-3">
+
+
+                            <label for="branch" class="form-label">Branch</label>
+
+                            <select class="form-select" name="branch" id="branch" value={state.branch} onChange={(e) => handler(e)}>
+                                <option value="">Select Your Branch</option>
+                                <option value="Food">Food</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Computer">Computer</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-center">
+
+                <button type="submit" class="btn btn-primary">ADD STUDENT</button>
+                
+                </div>
 
             </form>
 
-        </div>
+        </>
     )
 }
 
