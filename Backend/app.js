@@ -1,3 +1,4 @@
+const serverless = require('serverless-http');
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 8000
@@ -5,14 +6,26 @@ require("./dbconn/db.js")
 const Studentdata = require("./models/Studentdata")
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.get("/studentdata", (req, res)=>{
 
+    
     Studentdata.find().then((response)=>{
         res.status(201).send(response)
     }).catch((error)=>{
         res.status(401).send(error)
     })
+
+
+})
+
+app.get("/test", (req, res)=>{
+
+    res.status(201).send("success")
+
+    
 
 
 })
@@ -64,6 +77,8 @@ app.delete("/studentdata/:id", (req, res)=>{
 })
 
 
-app.listen(port, ()=>{
-    console.log(`Server started at port no. ${port}`)
-})
+// app.listen(port, ()=>{
+//     console.log(`Server started at port no. ${port}`)
+// })
+
+module.exports.handler = serverless(app);
