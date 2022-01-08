@@ -154,52 +154,6 @@
         }
       }
     },
-    "EnterpriseLogAccessIamRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": "arn:aws:iam::802587217904:root"
-              },
-              "Action": "sts:AssumeRole",
-              "Condition": {
-                "StringEquals": {
-                  "sts:ExternalId": "ServerlessEnterprise-ad30544d-0878-481d-98e3-acb39e528c03"
-                }
-              }
-            }
-          ]
-        },
-        "Policies": [
-          {
-            "PolicyName": "LogFilterAccess",
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:FilterLogEvents"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::GetAtt": [
-                        "AppLogGroup",
-                        "Arn"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
     "AppLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -207,13 +161,18 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/backend/dev/1640717279806-2021-12-28T18:47:59.806Z/backend.zip"
+          "S3Key": "serverless/backend/dev/1641616931412-2022-01-08T04:42:11.412Z/backend.zip"
         },
-        "Handler": "s_app.handler",
+        "Handler": "app.handler",
         "Runtime": "nodejs12.x",
         "FunctionName": "backend-dev-app",
         "MemorySize": 1024,
         "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "DB_CONN_URL": "mongodb+srv://dipakbhise:Srcas123*@cluster0.teizo.mongodb.net/studentdata?retryWrites=true&w=majority"
+          }
+        },
         "Role": {
           "Fn::GetAtt": [
             "IamRoleLambdaExecution",
@@ -225,14 +184,14 @@
         "AppLogGroup"
       ]
     },
-    "AppLambdaVersionuUvakHnKG6zSWc6TCDmUEXVWTCWIdsljCu42ATi6jq4": {
+    "AppLambdaVersionFKvHziWciext9wTquitgpvQoz1T7QBeXo6a0CRgtQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "IPFceR/iF90mHVbNonn+cGdxXhnVF0DvBZkx8eApcuc="
+        "CodeSha256": "DiUA2Wq+U54qcIr2u32q/7c/hJ1a+akjUszUj5sYV4w="
       }
     },
     "ApiGatewayRestApi": {
@@ -357,7 +316,7 @@
         "AppLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1640717103260": {
+    "ApiGatewayDeployment1641616925867": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -406,153 +365,6 @@
           ]
         }
       }
-    },
-    "ApiGatewayLogGroup": {
-      "Type": "AWS::Logs::LogGroup",
-      "Properties": {
-        "LogGroupName": "/aws/api-gateway/backend-dev"
-      }
-    },
-    "CustomApiGatewayAccountCloudWatchRole": {
-      "Type": "Custom::ApiGatewayAccountRole",
-      "Version": 1,
-      "Properties": {
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
-            "Arn"
-          ]
-        }
-      }
-    },
-    "IamRoleCustomResourcesLambdaExecution": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Policies": [
-          {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "dev",
-                  "backend",
-                  "custom-resources-lambda"
-                ]
-              ]
-            },
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      ":",
-                      [
-                        "arn",
-                        {
-                          "Ref": "AWS::Partition"
-                        },
-                        "iam:",
-                        {
-                          "Ref": "AWS::AccountId"
-                        },
-                        "role/*"
-                      ]
-                    ]
-                  },
-                  "Action": [
-                    "iam:AttachRolePolicy",
-                    "iam:CreateRole",
-                    "iam:ListAttachedRolePolicies",
-                    "iam:PassRole"
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Resource": {
-                    "Fn::Join": [
-                      ":",
-                      [
-                        "arn",
-                        {
-                          "Ref": "AWS::Partition"
-                        },
-                        "apigateway:*::/account"
-                      ]
-                    ]
-                  },
-                  "Action": [
-                    "apigateway:GET",
-                    "apigateway:PATCH"
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
-      "Type": "AWS::Lambda::Function",
-      "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/backend/dev/1640717279806-2021-12-28T18:47:59.806Z/custom-resources.zip"
-        },
-        "FunctionName": "backend-dev-custom-resource-apigw-cw-role",
-        "Handler": "apiGatewayCloudWatchRole/handler.handler",
-        "MemorySize": 1024,
-        "Runtime": "nodejs12.x",
-        "Timeout": 180,
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleCustomResourcesLambdaExecution",
-            "Arn"
-          ]
-        }
-      },
-      "DependsOn": [
-        "IamRoleCustomResourcesLambdaExecution"
-      ]
-    },
-    "CWLSubFilterAppLogGroupUsEast1": {
-      "Type": "AWS::Logs::SubscriptionFilter",
-      "Properties": {
-        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:ad30544d-0878-481d-98e3-acb39e528c03#HYrQ6XzH77G4YDrJ6X#backend#dev",
-        "FilterPattern": "?\"REPORT RequestId: \" ?\"SERVERLESS_ENTERPRISE\"",
-        "LogGroupName": {
-          "Ref": "AppLogGroup"
-        }
-      }
-    },
-    "CWLSubFilterApiGatewayLogGroupUsEast1": {
-      "Type": "AWS::Logs::SubscriptionFilter",
-      "Properties": {
-        "DestinationArn": "arn:aws:logs:us-east-1:802587217904:destination:ad30544d-0878-481d-98e3-acb39e528c03#HYrQ6XzH77G4YDrJ6X#backend#dev",
-        "FilterPattern": "\"SLS_ACCESS_LOG\"",
-        "LogGroupName": {
-          "Ref": "ApiGatewayLogGroup"
-        }
-      }
     }
   },
   "Outputs": {
@@ -564,21 +376,10 @@
         "Name": "sls-backend-dev-ServerlessDeploymentBucketName"
       }
     },
-    "EnterpriseLogAccessIamRole": {
-      "Value": {
-        "Fn::GetAtt": [
-          "EnterpriseLogAccessIamRole",
-          "Arn"
-        ]
-      },
-      "Export": {
-        "Name": "sls-backend-dev-EnterpriseLogAccessIamRole"
-      }
-    },
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionuUvakHnKG6zSWc6TCDmUEXVWTCWIdsljCu42ATi6jq4"
+        "Ref": "AppLambdaVersionFKvHziWciext9wTquitgpvQoz1T7QBeXo6a0CRgtQ"
       },
       "Export": {
         "Name": "sls-backend-dev-AppLambdaFunctionQualifiedArn"

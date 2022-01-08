@@ -1,9 +1,7 @@
-org: dipakbhise
-app: backend
-
 service: backend
 
-frameworkVersion: '2'
+plugins:
+  - serverless-dotenv-plugin
 
 provider:
   name: aws
@@ -19,3 +17,5 @@ functions:
     events:  
       - http: ANY /    
       - http: 'ANY /{proxy+}'
+
+   

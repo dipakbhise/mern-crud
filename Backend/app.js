@@ -1,5 +1,7 @@
+require('dotenv').config();
 const serverless = require('serverless-http');
 const express = require("express");
+var cors = require('cors')
 const app = express();
 const port = process.env.PORT || 8000
 require("./dbconn/db.js")
@@ -8,6 +10,7 @@ const Studentdata = require("./models/Studentdata")
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors())
 
 app.get("/studentdata", (req, res)=>{
 
@@ -77,8 +80,8 @@ app.delete("/studentdata/:id", (req, res)=>{
 })
 
 
-// app.listen(port, ()=>{
-//     console.log(`Server started at port no. ${port}`)
-// })
+app.listen(port, ()=>{
+    console.log(`Server started at port no. ${port}`)
+})
 
 module.exports.handler = serverless(app);
